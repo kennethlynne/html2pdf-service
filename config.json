@@ -1,0 +1,9 @@
+{
+    "allowedTargets": [
+        "http://www.google.com"
+    ],
+    "allowedHosts": [
+        "*"
+    ],
+    "secret": "supersecret"
+}

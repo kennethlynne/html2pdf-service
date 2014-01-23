@@ -1,7 +1,8 @@
 var express = require('express'),
     http = require('http'),
     path = require('path'),
-    phantom = require('phantom');
+    phantom = require('phantom'),
+    config = require('config.json');
 
 var app = module.exports = express();
 
@@ -14,24 +15,41 @@ if (app.get('env') === 'development') {
     app.use(express.errorHandler());
 };
 
-if (app.get('env') === 'production') {
-};
-
 app.get('*', function (req, res) {
-    res.send('HELLO');
 
-    //TODO: Verify token
-    //TODO: Only allow generation from whitelisted domain
+    var params = req.query;
+
+    if (!params.targetUrl) {
+        res.status(400);
+        res.json({message: 'Missing targetUrl!'});
+        return;
+    }
+
+    var filename = params.filename || new Date().toISOString().split('T')[0] + '.pdf';
+    var targetUrl = params.targetUrl;
+
+    var secretIsValid = (params.secret !== config.secret);
+
+    //TODO: Validate using regex
+    var hostIsAllowed = (!config.allowedHosts.contains("*") || !config.allowedHosts.contains(req.host));
+    var targetIsAllowed = (!config.allowedTarges.contains("*") || !config.alloedTargets.contains(targetUrl));
+
+    if (!secretIsValid || !hostIsAllowed || !targetIsAllowed ) {
+        res.status(403);
+        res.json({message: 'Not allowed!'});
+        return;
+    };
 
     phantom.create(function (phantomClient) {
 
         phantomClient.createPage(function (page) {
-            page.open('http://www.google.com', function (status) {
-                page.render('export.pdf', function () {
-
-                })
+            page.open(targetUrl, function (status) {
+                page.render(filename, function () {
+                    res.download(filename);
+                });
             });
         });
+
     });
 
 });
