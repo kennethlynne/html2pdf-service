@@ -1,0 +1,23 @@
+{
+  "name": "html2pdf-service",
+  "version": "0.0.0",
+  "description": "Save a web-page as pdf",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kennethlynne/html2pdf-service.git"
+  },
+  "keywords": [
+    "pdf",
+    "express",
+    "html2pdf"
+  ],
+  "author": "Kenneth Lynne <kenneth.lynne@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kennethlynne/html2pdf-service/issues"
+  }
+}
