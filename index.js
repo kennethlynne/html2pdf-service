@@ -15,7 +15,7 @@ if (app.get('env') === 'development') {
     app.use(express.errorHandler());
 };
 
-app.get('*', function (req, res) {
+app.get('/download', function (req, res) {
 
     var params = req.query;
 
@@ -25,20 +25,20 @@ app.get('*', function (req, res) {
         return;
     }
 
-    var filename = params.filename || new Date().toISOString().split('T')[0] + '.pdf';
-    var targetUrl = params.targetUrl;
-
-    var secretIsValid = (params.secret !== config.secret);
+    var secretIsValid = (params.secret == config.secret);
 
     //TODO: Validate using regex
-    var hostIsAllowed = (!config.allowedHosts.contains("*") || !config.allowedHosts.contains(req.host));
-    var targetIsAllowed = (!config.allowedTarges.contains("*") || !config.alloedTargets.contains(targetUrl));
+    var hostIsAllowed = (config.allowedHosts.indexOf("*") >= 0 || config.allowedHosts.indexOf(req.host) >= 0);
+    var targetIsAllowed = (config.allowedTarges.indexOf("*") >= 0 || config.alloedTargets.indexOf(targetUrl) >= 0);
 
     if (!secretIsValid || !hostIsAllowed || !targetIsAllowed ) {
         res.status(403);
         res.json({message: 'Not allowed!'});
         return;
     };
+
+    var filename = params.filename || new Date().toISOString().split('T')[0] + '.pdf';
+    var targetUrl = params.targetUrl;
 
     phantom.create(function (phantomClient) {
 
