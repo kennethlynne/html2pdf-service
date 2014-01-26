@@ -2,7 +2,7 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     phantom = require('phantom'),
-    config = require('config.json');
+    config = require('./config.json');
 
 var app = module.exports = express();
 
