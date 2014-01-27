@@ -13,7 +13,7 @@ app.use(app.router);
 
 if (app.get('env') === 'development') {
     app.use(express.errorHandler());
-};
+}
 
 app.get('/download', function (req, res) {
 
@@ -50,6 +50,10 @@ app.get('/download', function (req, res) {
 
     });
 
+});
+
+app.get('*', function(req, res){
+    res.send('Not found', 404);
 });
 
 http.createServer(app).listen(app.get('port'), function () {
