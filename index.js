@@ -1,12 +1,13 @@
 var express = require('express'),
     http = require('http'),
     path = require('path'),
-    //phantom = require('phantom'),
+    phantom = require('phantom'),
     config = require('./config.json');
 
 var app = module.exports = express();
 
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || config.port || 80);
+app.set('host', process.env.PORT ||  config.host || '127.0.0.1');
 app.use(express.logger('dev'));
 app.use(express.methodOverride());
 app.use(app.router);
@@ -57,8 +58,8 @@ app.get('*', function(req, res){
     res.send('Not found', 404);
 });
 
-http.createServer(app).listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'));
+http.createServer(app).listen(app.get('port'), app.get('host'), function () {
+    console.log('Express server listening on port ' + app.get('host') + ':' +  app.get('port'));
 });
 
 app.use(function(err, req, res, next){
