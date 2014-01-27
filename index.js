@@ -27,7 +27,7 @@ app.get('/download', function (req, res) {
 
     var secretIsValid = (params.secret == config.secret);
     var hostIsAllowed = (config.allowedHosts.indexOf("*") >= 0 || config.allowedHosts.indexOf(req.host) >= 0); //TODO: Validate using regex
-    var targetIsAllowed = (config.allowedTarges.indexOf("*") >= 0 || config.alloedTargets.indexOf(targetUrl) >= 0); //TODO: Validate using regex
+    var targetIsAllowed = (config.allowedTarges.indexOf("*") >= 0 || config.alloedTargets.indexOf(params.targetUrl) >= 0); //TODO: Validate using regex
 
     if (!secretIsValid || !hostIsAllowed || !targetIsAllowed ) {
         res.status(403);
