@@ -26,16 +26,14 @@ app.get('/download', function (req, res) {
     }
 
     var secretIsValid = (params.secret == config.secret);
-
-    //TODO: Validate using regex
-    var hostIsAllowed = (config.allowedHosts.indexOf("*") >= 0 || config.allowedHosts.indexOf(req.host) >= 0);
-    var targetIsAllowed = (config.allowedTarges.indexOf("*") >= 0 || config.alloedTargets.indexOf(targetUrl) >= 0);
+    var hostIsAllowed = (config.allowedHosts.indexOf("*") >= 0 || config.allowedHosts.indexOf(req.host) >= 0); //TODO: Validate using regex
+    var targetIsAllowed = (config.allowedTarges.indexOf("*") >= 0 || config.alloedTargets.indexOf(targetUrl) >= 0); //TODO: Validate using regex
 
     if (!secretIsValid || !hostIsAllowed || !targetIsAllowed ) {
         res.status(403);
         res.json({message: 'Not allowed!'});
         return;
-    };
+    }
 
     var filename = params.filename || new Date().toISOString().split('T')[0] + '.pdf';
     var targetUrl = params.targetUrl;
