@@ -27,8 +27,8 @@ app.get('/download', function (req, res) {
     }
     
     var secretIsValid = (params.secret == config.secret);
-    var hostIsAllowed = (config.allowedHosts.indexOf("*") >= 0 || config.allowedHosts.indexOf(req.host) >= 0); //TODO: Validate using regex
-    var targetIsAllowed = (config.allowedTargets.indexOf("*") >= 0 || config.allowedTargets.indexOf(params.targetUrl) >= 0); //TODO: Validate using regex
+    var hostIsAllowed = (config.allowedHosts.indexOf("*") >= 0 || config.allowedHosts.indexOf(req.host) >= 0); //TODO: Validate using foreach->regex
+    var targetIsAllowed = (config.allowedTargets.indexOf("*") >= 0 || config.allowedTargets.indexOf(params.targetUrl) >= 0); //TODO: Validate using foreach->regex
 
     if (!secretIsValid || !hostIsAllowed || !targetIsAllowed ) {
         res.status(403);
@@ -44,8 +44,10 @@ app.get('/download', function (req, res) {
 
         phantomClient.createPage(function (page) {
             page.open(targetUrl, function (status) {
+                //TODO: If file exists use another filename, and serve it with the original one
                 page.render('temp/' + filename, function () {
                     res.sendfile('temp/' + filename);
+                    //TODO: Delete the file after it is sent
                 });
             });
         });
